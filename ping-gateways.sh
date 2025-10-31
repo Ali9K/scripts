@@ -7,6 +7,6 @@ for gateway in "${GATEWAYS[@]}"; do
 	if ping -c 3 "$gateway" &>/dev/null; then
 		echo "$gateway is up from office"
 	else
-		echo "$gateway is up from office"
+		echo "$gateway is down from office"
 	fi
 done
