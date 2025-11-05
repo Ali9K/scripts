@@ -5,12 +5,12 @@
 PACKAGES_TO_INSTALL=(python3 pipx)
 
 # install
-echo "apt update..."
-sudo apt update -qq
+echo "apt-get update..."
+sudo apt-get update -qq
 
 echo "Install dependencies..."
 for pkgs in "${PACKAGES_TO_INSTALL[@]}" ; do
-	sudo apt install -qq -y "$pkgs" ;
+	sudo apt-get install -qq -y "$pkgs" ;
 done
 
 echo "Install full ansible..."
