@@ -1,7 +1,8 @@
 # This is an sript to ping AsiaTech from office
 #!/bin/bash
 
-ASIATECH=(31.7.78.144 31.7.78.127)
+source .env 
+# ASIATECH must be in .env
 
 for asiatech in "${ASIATECH[@]}"; do
 	if ping -c 3 "$asiatech" &>/dev/null; then

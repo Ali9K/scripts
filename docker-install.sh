@@ -2,14 +2,15 @@
 #This is an script for installing docker on debian based distro's
 
 #variables
+source .env
+
 PACKAGES_TO_REMOVE=(docker.io docker-doc docker-compose podman-docker containerd runc)
 
-GPG_URL=https://download.docker.com/linux/debian/gpg
-
-DOCKER_SOURCE_LIST_URL=https://download.docker.com/linux/debian
+# DOCKER_SOURCE_LIST_URL must be in .env
+# GPG_URL must be in .env
 DOCKER_SOURCE_LIST_COMPONENT=stable
-ARCH=amd64
-DEBIAN_CODENAME=bookworm
+ARCH="$(dpkg --print-architecture)"
+DEBIAN_CODENAME="$(. /etc/os-release && echo "$VERSION_CODENAME")"
 
 PACKAGES_TO_INSTALL=(docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin)
 

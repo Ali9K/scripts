@@ -2,7 +2,6 @@
 #This is an script for making sudo passwordless
 
 #variables
-USER=alch
 SUDOERS_FILE="/etc/sudoers.d/$USER"
 
 # Check for root

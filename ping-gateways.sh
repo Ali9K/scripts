@@ -1,7 +1,8 @@
 # This is an sript to ping the gateways from office
 #!/bin/bash
 
-GATEWAYS=(172.30.14.33 172.30.15.33 172.30.16.33 172.30.17.33 172.30.18.33)
+source .env 
+# GATEWAYS must be in .env
 
 for gateway in "${GATEWAYS[@]}"; do
 	if ping -c 3 "$gateway" &>/dev/null; then

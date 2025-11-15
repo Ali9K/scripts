@@ -1,7 +1,9 @@
 # This is an sript to ping SimServer from office
 #!/bin/bash
 
-SIMSERVER=(172.16.154.99)
+source .env 
+# SIMSERVER must be in .env
+
 
 for simserver in "${SIMSERVER[@]}"; do
 	if ping -c 3 "$simserver" &>/dev/null; then
