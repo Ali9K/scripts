@@ -5,45 +5,38 @@
 source .env
 
 PACKAGES_TO_REMOVE=(docker.io docker-doc docker-compose podman-docker containerd runc)
-
-# DOCKER_SOURCE_LIST_URL must be in .env
-# GPG_URL must be in .env
-DOCKER_SOURCE_LIST_COMPONENT=stable
-ARCH="$(dpkg --print-architecture)"
-DEBIAN_CODENAME="$(. /etc/os-release && echo "$VERSION_CODENAME")"
-
 PACKAGES_TO_INSTALL=(docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin)
 
 #pretasks
 for pkgs in "${PACKAGES_TO_REMOVE[@]}" ; do
-	sudo apt-get remove -qq $pkgs ;
+	apt-get remove -qq $pkgs > /dev/null ;
 done
 
 echo "Add Docker's GPG key: "
-sudo apt-get update -qq
-sudo apt-get install ca-certificates curl -y -qq
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL $GPG_URL -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+apt-get update -qq > /dev/null
+apt-get install ca-certificates curl -y > /dev/null
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL $GPG_URL -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
 
 echo "Add the repository to Apt sources:"
-sudo tee /etc/apt/sources.list.d/docker.list <<EOF
+tee /etc/apt/sources.list.d/docker.list <<EOF
 deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.asc] $DOCKER_SOURCE_LIST_URL $DEBIAN_CODENAME $DOCKER_SOURCE_LIST_COMPONENT
 EOF
 
-sudo apt-get update
+apt-get update > /dev/null
 
 for pkgs in "${PACKAGES_TO_INSTALL[@]}" ; do
-	sudo apt-get install -qq -y $pkgs ;
+	apt-get install -qq -y $pkgs > /dev/null ;
 done
 
-sudo systemctl start docker
+systemctl start docker
 
-sudo systemctl enable docker
+systemctl enable docker
 
 #post-installation steps for Docker Engine
-sudo groupadd -f docker
+groupadd -f docker
 
-sudo usermod -aG docker $USER
+usermod -aG docker $USER
 
-newgrp docker
+echo "Logout and login again to use Docker without sudo."
