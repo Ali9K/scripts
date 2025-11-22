@@ -2,6 +2,7 @@
 #This is an script for making sudo passwordless
 
 #variables
+read -p "Enter the USER name: " USER
 SUDOERS_FILE="/etc/sudoers.d/$USER"
 
 # Check for root
