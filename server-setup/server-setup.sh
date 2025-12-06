@@ -76,11 +76,38 @@ fi
 printf '\n\n\n'
 
 # ****************************** STEP 3 ******************************
-echo "****************************** Add SSH key ******************************"
+echo "****************************** Configure Passwordless Sudo ******************************"
 printf '\n'
-read -rp "Do you want to add SSH keys (Y or N)? " RUN_STEP_3
+read -rp "Do you want to enable passwordless sudo for user '$SCRIPT_USER' (Y or N)? " RUN_STEP_3
 
 if [[ "$RUN_STEP_3" == "Y" || "$RUN_STEP_3" == "y" ]]; then
+
+    # Backup existing sudoers file if it exists
+    if [[ -f "$SUDOERS_FILE" ]]; then
+        cp "$SUDOERS_FILE" "${SUDOERS_FILE}.bak"
+        echo "Existing sudoers file backed up to ${SUDOERS_FILE}.bak"
+    fi
+
+    # Write passwordless sudo entry safely
+    echo "$SCRIPT_USER ALL=(ALL) NOPASSWD:ALL" > "$SUDOERS_FILE"
+    chmod 0440 "$SUDOERS_FILE"
+
+    echo "Passwordless sudo enabled for user $SCRIPT_USER."
+
+elif [[ "$RUN_STEP_3" == "N" || "$RUN_STEP_3" == "n" ]]; then
+    echo "Skipping Step 3..."
+else
+    echo "Incorrect option, skipping Step 3..."
+fi
+
+printf '\n\n\n'
+
+# ****************************** STEP 4 ******************************
+echo "****************************** Add SSH key ******************************"
+printf '\n'
+read -rp "Do you want to add SSH keys (Y or N)? " RUN_STEP_4
+
+if [[ "$RUN_STEP_4" == "Y" || "$RUN_STEP_4" == "y" ]]; then
     echo "Create .ssh directory if it doesn't exist"
     mkdir -p "$SSH_DIR"
     chmod 700 "$SSH_DIR"
@@ -104,20 +131,20 @@ if [[ "$RUN_STEP_3" == "Y" || "$RUN_STEP_3" == "y" ]]; then
         fi
     done
 
-elif [[ "$RUN_STEP_3" == "N" || "$RUN_STEP_3" == "n" ]]; then
-    echo "Skipping Step 3..."
+elif [[ "$RUN_STEP_4" == "N" || "$RUN_STEP_4" == "n" ]]; then
+    echo "Skipping Step 4..."
 else
-    echo "Incorrect option, skipping Step 3..."
+    echo "Incorrect option, skipping Step 4..."
 fi
 
 printf '\n\n\n'
 
-# ****************************** STEP 4 ******************************
+# ****************************** STEP 5 ******************************
 echo "****************************** sshd config hardening ******************************"
 printf '\n'
-read -rp "Do you want to update sshd config (Y or N)? " RUN_STEP_4
+read -rp "Do you want to update sshd config (Y or N)? " RUN_STEP_5
 
-if [[ "$RUN_STEP_4" == "Y" || "$RUN_STEP_4" == "y" ]]; then
+if [[ "$RUN_STEP_5" == "Y" || "$RUN_STEP_5" == "y" ]]; then
     cp "$SSHD_CONFIG" "$BACKUP_SSHD"
     echo "Backup from sshd_config created at $BACKUP_SSHD"
 
@@ -140,20 +167,20 @@ if [[ "$RUN_STEP_4" == "Y" || "$RUN_STEP_4" == "y" ]]; then
     systemctl restart sshd
     echo "sshd_config updated and service restarted."
 
-elif [[ "$RUN_STEP_4" == "N" || "$RUN_STEP_4" == "n" ]]; then
-    echo "Skipping Step 4..."
+elif [[ "$RUN_STEP_5" == "N" || "$RUN_STEP_5" == "n" ]]; then
+    echo "Skipping Step 5..."
 else
-    echo "Incorrect option, skipping Step 4..."
+    echo "Incorrect option, skipping Step 5..."
 fi
 
 printf '\n\n\n'
 
-# ****************************** STEP 5 ******************************
+# ****************************** STEP 6 ******************************
 echo "****************************** Set iptables ******************************"
 printf '\n'
-read -rp "Do you want to configure iptables (Y or N)? " RUN_STEP_5
+read -rp "Do you want to configure iptables (Y or N)? " RUN_STEP_6
 
-if [[ "$RUN_STEP_5" == "Y" || "$RUN_STEP_5" == "y" ]]; then
+if [[ "$RUN_STEP_6" == "Y" || "$RUN_STEP_6" == "y" ]]; then
     echo "Seting default policies..."
     iptables -P INPUT $IPTABLES_INPUT
     iptables -P FORWARD $IPTABLES_FORWARD
@@ -185,15 +212,15 @@ if [[ "$RUN_STEP_5" == "Y" || "$RUN_STEP_5" == "y" ]]; then
         ip6tables-save > /etc/iptables/rules.v6
     fi
 
-elif [[ "$RUN_STEP_5" == "N" || "$RUN_STEP_5" == "n" ]]; then
-    echo "Skipping Step 5..."
+elif [[ "$RUN_STEP_6" == "N" || "$RUN_STEP_6" == "n" ]]; then
+    echo "Skipping Step 6..."
 else
-    echo "Incorrect option, skipping Step 5..."
+    echo "Incorrect option, skipping Step 6..."
 fi
 
 printf '\n\n\n'
 
-# ****************************** STEP 6 ******************************
+# ****************************** STEP 7 ******************************
 echo "****************************** Install docker ******************************"
 printf '\n'
 read -rp "Do you want to install Docker (Y or N)? " INSTALL_DOCKER
