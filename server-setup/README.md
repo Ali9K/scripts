@@ -4,29 +4,27 @@ This Bash script automates the initial setup and hardening of a Debian server. I
 
 ## Features
 
-1. **Update APT sources**  
-   Configures default, updates, backports, and security repositories.
+The script is designed to be **fully interactive**, asking for confirmation before executing each of the following 6 steps:
 
-2. **Install essential packages**  
-   Installs a predefined list of packages from `.env`.
+1.  **Update APT sources** Configures default, updates, backports, and security repositories.
 
-3. **SSH key management**  
-   Creates `.ssh` directory, adds multiple SSH public keys, and prevents duplicates.
+2.  **Install essential packages** Installs a predefined list of packages from `.env`, including `iptables-persistent`.
 
-4. **SSHD hardening**  
-   Updates `sshd_config` to enforce security best practices (disable root login, set port, configure authentication methods, etc.).
+3.  **SSH key management** Creates `.ssh` directory, interactively prompts to add multiple SSH public keys, and prevents duplicates.
 
-5. **Firewall setup with iptables**  
-   Configures default policies, allows specific ports, loopback, and established connections.
+4.  **SSHD hardening** Updates `sshd_config` to enforce security best practices (disable root login, set port, configure authentication methods, etc.) and restarts the SSH service.
 
-6. **Optional Docker installation**  
-   Prompts the user to install Docker via a separate script (`docker-install.sh`).
+5.  **Firewall setup with iptables** Configures default policies (`INPUT`, `FORWARD`, `OUTPUT`), allows specific ports, loopback, established connections, and saves the rules using `netfilter-persistent` or `iptables-save`.
+
+6.  **Optional Docker installation** Prompts the user to install **Docker Engine** by sourcing a separate script (`docker-install.sh`), which includes adding the GPG key, setting up the repository, installing core Docker packages, enabling the service, and adding the user to the `docker` group.
+
+---
 
 ## Prerequisites
 
-- Debian-based server
-- Run as **root** (`sudo`)
-- `.env` file containing required variables:
+-   Debian-based server
+-   Run as **root** (`sudo`)
+-   `.env` file containing required variables:
 
 ```bash
 APT_TARGET=
@@ -35,8 +33,8 @@ APT_SECURITY_URL=
 DEBIAN_CODENAME=
 APT_COMPONENTS=
 PACKAGES_TO_INSTALL=()
+SCRIPT_USER= # Required by both scripts (for SSH key ownership & Docker group)
 SSH_DIR=
-USER_SSH=
 AUTH_KEYS=
 SSHD_CONFIG=
 BACKUP_SSHD=
@@ -56,4 +54,10 @@ IPTABLES_INPUT=
 IPTABLES_FORWARD=
 IPTABLES_OUTPUT=
 IPTABLES_ALLOW_PORTS=()
+IPT_PERSISTENT=
 
+# Docker-specific variables (used in docker-install.sh)
+GPG_URL=
+ARCH=
+DOCKER_SOURCE_LIST_URL=
+DOCKER_SOURCE_LIST_COMPONENT=

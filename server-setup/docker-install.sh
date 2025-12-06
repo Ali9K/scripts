@@ -37,7 +37,7 @@ systemctl enable docker
 #post-installation steps for Docker Engine
 groupadd -f docker
 
-usermod -aG docker $USER
+usermod -aG docker $SCRIPT_USER
 
 echo "Logout and login again to use Docker without sudo."
 
