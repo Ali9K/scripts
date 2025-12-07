@@ -150,18 +150,18 @@ if [[ "$RUN_STEP_5" == "Y" || "$RUN_STEP_5" == "y" ]]; then
 
     # Update sshd_config using sed
     echo "Updating sshd configs..."
-    sed -i "s/^#Port .*/Port $PORT/" "$SSHD_CONFIG"
-    sed -i "s/^#PermitRootLogin .*/PermitRootLogin $PERMIT_ROOT_LOGIN/" "$SSHD_CONFIG"
-    sed -i "s/^#MaxAuthTries .*/MaxAuthTries $MAX_AUTH_TRIES/" "$SSHD_CONFIG"
-    sed -i "s/^#PubkeyAuthentication .*/PubkeyAuthentication $PUBKEY_AUTH/" "$SSHD_CONFIG"
-    sed -i "s/^#PasswordAuthentication .*/PasswordAuthentication $PASSWORD_AUTH/" "$SSHD_CONFIG"
-    sed -i "s/^#PermitEmptyPasswords .*/PermitEmptyPasswords $EMPTY_PASS/" "$SSHD_CONFIG"
-    sed -i "s/^#KbdInteractiveAuthentication .*/KbdInteractiveAuthentication $KBD_INTERACTIVE_AUTH/" "$SSHD_CONFIG"
-    sed -i "s/^#KerberosAuthentication .*/KerberosAuthentication $KERBEROS_AUTH/" "$SSHD_CONFIG"
-    sed -i "s/^#GSSAPIAuthentication .*/GSSAPIAuthentication $GSS_AUTH/" "$SSHD_CONFIG"
-    sed -i "s/^#UsePAM .*/UsePAM $USE_PAM/" "$SSHD_CONFIG"
-    sed -i "s/^#X11Forwarding .*/X11Forwarding $X11_FORWARDING/" "$SSHD_CONFIG"
-    sed -i "s/^#PrintMotd .*/PrintMotd $PRINT_MOTD/" "$SSHD_CONFIG"
+    sed -i "s/^[#[:space:]]*Port.*/Port $PORT/" "$SSHD_CONFIG"
+    sed -i "s/^[#[:space:]]*PermitRootLogin.*/PermitRootLogin $PERMIT_ROOT_LOGIN/" "$SSHD_CONFIG"
+    sed -i "s/^[#[:space:]]*MaxAuthTries.*/MaxAuthTries $MAX_AUTH_TRIES/" "$SSHD_CONFIG"
+    sed -i "s/^[#[:space:]]*PubkeyAuthentication.*/PubkeyAuthentication $PUBKEY_AUTH/" "$SSHD_CONFIG"
+    sed -i "s/^[#[:space:]]*PasswordAuthentication.*/PasswordAuthentication $PASSWORD_AUTH/" "$SSHD_CONFIG"
+    sed -i "s/^[#[:space:]]*PermitEmptyPasswords.*/PermitEmptyPasswords $EMPTY_PASS/" "$SSHD_CONFIG"
+    sed -i "s/^[#[:space:]]*KbdInteractiveAuthentication.*/KbdInteractiveAuthentication $KBD_INTERACTIVE_AUTH/" "$SSHD_CONFIG"
+    sed -i "s/^[#[:space:]]*KerberosAuthentication.*/KerberosAuthentication $KERBEROS_AUTH/" "$SSHD_CONFIG"
+    sed -i "s/^[#[:space:]]*GSSAPIAuthentication.*/GSSAPIAuthentication $GSS_AUTH/" "$SSHD_CONFIG"
+    sed -i "s/^[#[:space:]]*UsePAM.*/UsePAM $USE_PAM/" "$SSHD_CONFIG"
+    sed -i "s/^[#[:space:]]*X11Forwarding.*/X11Forwarding $X11_FORWARDING/" "$SSHD_CONFIG"
+    sed -i "s/^[#[:space:]]*PrintMotd.*/PrintMotd $PRINT_MOTD/" "$SSHD_CONFIG"
 
     # Restart SSH service to apply changes
     systemctl restart sshd
